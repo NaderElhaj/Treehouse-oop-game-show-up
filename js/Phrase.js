@@ -30,7 +30,6 @@ class Phrase {
 
   showMatchedLetter(t) {
     const letters = document.querySelectorAll("."+t);
-    console.log(letters)
     for(let i=0; i<letters.length;i++){
       letters[i].className="show"
     }
