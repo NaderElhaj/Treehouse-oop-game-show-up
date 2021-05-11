@@ -41,14 +41,43 @@ class Game {
     ];
     this.activePhrase = null;
   }
+  gameOver(gameWon) {
+		let startbtn = document.querySelector("#overlay");
+		const resetBtn = document.getElementById("btn__reset");
+		let title = document.querySelector('.title');
+		if (gameWon == "lose") {
+			startbtn.style.display = 'block';
+            startbtn.classList.toggle("lose");
+            title.textContent = "You Lost :(";
+            title.classList.add('vibrate-1')
+            resetBtn.textContent = "Repeat :D ";
+            resetBtn.addEventListener('click', () => {
+				window.location.reload();
+			})
+		} else if (this.checkForWin()) {
+			startbtn.style.display = 'block';
+			startbtn.classList.toggle("win");
+			resetBtn.textContent = "Repeat :D ";
+			resetBtn.style.color = "black";
+			resetBtn.style.fontWeight = "bold";
+			title.textContent = "You Won the Game !";
+			title.classList.add('kenburns-top');
+			resetBtn.addEventListener('click', () => {
+				window.location.reload();
+			})
+		}
+	}
 
-  removeLife() {
-    tries[this.missed].firstChild.src = "./images/lostHeart.png";
-    this.missed += 1;
-    if (this.missed == 5) {
-      this.gameOver();
-    }
-  }
+
+	removeLife() {
+		let heart = document.querySelectorAll(".tries img");
+		heart[0].src = "images/lostHeart.png";
+		heart[0].parentNode.classList.remove("tries");
+		this.missed++;
+		if (this.missed == 5) {
+			this.gameOver("lose");
+		}
+	}
   checkForWin() {
     let check = true;
     for (let i = 0; i < this.activePhrase.phrase.length; i++) {
@@ -58,28 +87,7 @@ class Game {
     }
     return check;
   }
-  gameOver() {
-    overlay.style.display = "block";
 
-    if (this.checkForWin()) {
-      btn.textContent = "win";
-      btn.className = "win";
-    } else {
-      btn.textContent = "loss";
-      btn.className = "lose";
-    }
-    for (let i = 0; i < this.activePhrase.phrase.length; i++) {
-      ul.removeChild(ul.firstChild);
-      tries[i].firstChild.src = "./images/liveHeart.png";
-    }
-    for (let i = 0; i < keys.length; i++) {
-      keys.forEach((element) => {
-        element.className = "key";
-        element.disabled = false;
-      });
-    }
-    this.missed = 0;
-  }
 
   getRandomPhrase() {
     return this.phrases[Math.floor(Math.random() * this.phrases.length)];
